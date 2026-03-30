@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ta Ray - Official Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mitr: ['Mitr', 'sans-serif'],
+                        fredoka: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        'game-dark': '#020617',
+                        'game-card-bg': '#0B1120',
+                        'neon-blue': '#3B82F6',
+                        'neon-cyan': '#22D3EE',
+                        'neon-white': '#F8FAFC',
+                        'dark-blue': '#1E3A8A'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Starry Background & Corrected Meteor Effect */
+        .night-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+        .bg-star {
+            position: absolute; background: white; border-radius: 50%; opacity: 0.5;
+            animation: twinkle 2s infinite alternate;
+        }
+        @keyframes twinkle { 0% { opacity: 0.2; transform: scale(0.6); } 100% { opacity: 1; transform: scale(1.2); } }
+
+        .meteor {
+            position: absolute; width: 2px; height: 80px;
+            /* ไล่สีให้หางจาง หัวทึบ */
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(100,200,255,1) 100%);
+            opacity: 0; 
+            animation: meteorAnim 4s linear infinite;
+            border-radius: 50px;
+        }
+        @keyframes meteorAnim {
+            /* เริ่มจากขวาบน พุ่งลงซ้ายล่าง โดยหัวหันไปทางซ้ายล่าง (rotate 45deg) */
+            0% { transform: translate(200px, -200px) rotate(45deg); opacity: 1; }
+            20% { transform: translate(-600px, 600px) rotate(45deg); opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        .game-card {
+            background-color: #0B1120;
+            background: linear-gradient(180deg, #1E3A8A 0%, #0B1120 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        /* 3D Text Effects - Adapted to Blue Theme */
+        .text-3d-title {
+            color: #F8FAFC;
+            text-shadow: 2px 2px 0px #22D3EE, 4px 4px 0px #1E3A8A;
+            letter-spacing: 1px;
+        }
+        .text-3d-subtitle {
+            color: #60A5FA;
+            text-shadow: 2px 2px 0px #020617;
+        }
+        .text-3d-header {
+            color: #F8FAFC;
+            text-shadow: 2px 2px 0px #3B82F6;
+        }
+
+        /* Scoreboard style row */
+        .score-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 12px; border-radius: 20px;
+            font-family: 'Mitr', sans-serif; font-weight: 500;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .score-row:hover {
+            transform: translateY(-2px);
+            border-color: #22D3EE;
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 0px; }
+
+        /* Floating Animation for decorations */
+        .float-anim { animation: floating 3s ease-in-out infinite; }
+        .float-anim-delayed { animation: floating 3s ease-in-out infinite 1.5s; }
+        @keyframes floating {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Marquee */
+        .marquee-wrapper { overflow: hidden; white-space: nowrap; width: 100%; }
+        .marquee-content { display: inline-block; animation: marquee 15s linear infinite; font-weight: 600; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    </style>
+</head>
+<body class="font-mitr text-gray-200 antialiased selection:bg-neon-blue selection:text-white">
+
+    <div class="night-bg" id="star-container"></div>
+
+    <div class="max-w-2xl mx-auto grid grid-cols-1 gap-6 relative z-10 pb-10 mt-4">
+
+        <div class="game-card rounded-3xl p-8 flex flex-col justify-center items-center text-center">
+            <div class="absolute top-4 left-6 float-anim z-0 flex items-center transform rotate-12">
+                <svg class="w-8 h-8 text-neon-cyan drop-shadow-md" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="w-6 h-6 text-neon-blue -ml-2 -mt-6 drop-shadow-md" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <svg class="absolute bottom-6 left-6 w-10 h-10 text-dark-blue float-anim-delayed z-0 transform -rotate-12" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/><circle cx="8" cy="8" r="1.5" fill="#F8FAFC"/><circle cx="16" cy="16" r="1.5" fill="#F8FAFC"/><circle cx="8" cy="16" r="1.5" fill="#F8FAFC"/><circle cx="16" cy="8" r="1.5" fill="#F8FAFC"/><circle cx="12" cy="12" r="1.5" fill="#F8FAFC"/>
+            </svg>
+            <svg class="absolute top-8 right-8 w-8 h-8 text-neon-blue float-anim z-0 transform rotate-12" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/><circle cx="12" cy="12" r="2" fill="#F8FAFC"/>
+            </svg>
+            
+            <h1 class="font-fredoka text-6xl md:text-7xl text-3d-title leading-tight mb-2 z-10 transform -rotate-2 mt-4">TA RAY</h1>
+            <h2 class="font-fredoka text-lg text-3d-subtitle mb-5 z-10 uppercase tracking-widest">Welcome to my shop</h2>
+            
+            <div class="z-10 bg-game-dark/60 p-4 rounded-xl border-2 border-neon-blue w-full max-w-sm shadow-[4px_4px_0_#1E3A8A]">
+                <p class="text-[13px] leading-relaxed text-gray-200">
+                    รับฝากขาย รับทำป้ายฝากขาย<br>ป้ายเรทต่างๆ ป้ายคิวอาร์ ปกเครดิต<br>
+                    <span class="text-neon-cyan font-bold text-sm inline-block mt-1">ป้ายไอดียังไม่รับทำ แต่มีบริการรับหาไอดี</span>
+                </p>
+            </div>
+
+            <a href="https://docs.google.com/spreadsheets/d/1-kKlNjdrTLPbQ0ogYQt7Fb-QtCoLyMmX0H57NfEOMwA/edit?usp=drivesdk" target="_blank" class="mt-6 z-10 flex space-x-4 items-center">
+                <div class="bg-neon-blue border-[3px] border-neon-cyan text-white font-fredoka px-6 py-2 rounded-full text-lg shadow-[0_5px_0_#1E3A8A] transform hover:translate-y-1 hover:shadow-[0_2px_0_#1E3A8A] transition flex items-center gap-2">
+                    <i class="fa-solid fa-play text-sm"></i> CHECK QUEUE
+                </div>
+            </a>
+        </div>
+
+        <div class="game-card rounded-3xl p-6 flex flex-col items-center justify-center">
+            <svg class="absolute top-4 left-4 w-8 h-8 text-neon-blue float-anim z-0 opacity-50" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12" stroke="#0B1120" stroke-width="2"/></svg>
+            
+            <h2 class="font-fredoka text-3xl text-3d-header mb-1 z-10 uppercase">BOOST ID RATES</h2>
+            <p class="text-neon-cyan font-fredoka text-[10px] mb-4 z-10 tracking-widest">เรทราคาดันไอดี</p>
+            
+            <div class="w-full z-10 mb-5 rounded-2xl overflow-hidden border-2 border-neon-blue/40 shadow-lg">
+                <img src="att.qinRJRdZk5uRPfzTV5LLWtC3_BvNc47dYtI2am68Mtc.jpeg" alt="เรทราคาดันไอดี" class="w-full object-cover hover:scale-105 transition duration-500">
+            </div>
+
+            <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-2 z-10 text-xs">
+                <div class="score-row bg-dark-blue text-white"><span>500 - 900</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">15 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>1000 - 1499</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">25 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>1500 - 1999</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">30 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>2000 - 2499</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">45 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>2500 - 4499</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">57 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>4500 - 5999</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">65 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>6000 - 7500</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">80 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>7501 - 8500</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">95 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>8501 - 9999</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">145 ฿</span></div>
+                <div class="score-row md:col-span-2 bg-gradient-to-r from-dark-blue to-neon-blue text-white border-neon-cyan">
+                    <span>10,000+ ขึ้นไป คิดเป็น %</span><span class="bg-black/40 px-2 py-0.5 rounded text-yellow-300 font-bold">1.9% - 5.5%</span>
+                </div>
+            </div>
+            <div class="text-center mt-4 z-10 w-full">
+                <span class="bg-game-dark/80 text-red-400 text-xs border border-red-500/50 px-4 py-1.5 rounded-full inline-block font-bold">⚠️ คนที่พึ่งใช้บริการจ่ายก่อนทุกกรณี</span>
+            </div>
+        </div>
+
+        <div class="game-card rounded-3xl p-6 flex flex-col items-center justify-center">
+            <svg class="absolute top-6 right-6 w-10 h-10 text-neon-cyan float-anim-delayed z-0 opacity-40" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 2H10v3H7v3H4v4h3v3h3v3h4v-3h3v-3h3V9h-3V6h-3V2z"/>
+            </svg>
+
+            <h2 class="font-fredoka text-3xl text-3d-header mb-1 z-10 uppercase">FIND ID RATES</h2>
+            <p class="text-neon-cyan font-fredoka text-[10px] mb-4 z-10 tracking-widest">เรทราคาหาไอดี</p>
+            
+            <div class="w-full z-10 mb-5 rounded-2xl overflow-hidden border-2 border-neon-cyan/40 shadow-lg">
+                <img src="IMG_0154.jpeg" alt="เรทราคาหาไอดี" class="w-full object-cover hover:scale-105 transition duration-500">
+            </div>
+
+            <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-2 z-10 text-xs">
+                <div class="score-row bg-dark-blue text-white"><span>1 - 900</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">40 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>901 - 1900</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">57 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>1901 - 3500</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">75 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>3501 - 6000</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">90 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>6001 - 9000</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">120 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>9001 - 9,999</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">145 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>10,000+++</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">170 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>15,000+++</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">200 ฿</span></div>
+                <div class="score-row bg-dark-blue text-white"><span>30,000+++</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-cyan font-bold">250 ฿</span></div>
+                <div class="score-row bg-neon-blue text-white"><span>50,000+++</span><span class="bg-black/40 px-2 py-0.5 rounded text-neon-white font-bold">275 ฿</span></div>
+                <div class="score-row md:col-span-2 bg-gradient-to-r from-neon-blue to-dark-blue text-white border-neon-cyan">
+                    <span>100,000+++</span><span class="bg-black/40 px-2 py-0.5 rounded text-yellow-300 font-bold">300 ฿</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-card rounded-3xl p-6">
+            <h2 class="font-fredoka text-2xl text-3d-header mb-4 z-10 uppercase text-center">HOW TO ORDER & FAQ</h2>
+            
+            <div class="grid grid-cols-1 gap-4 z-10 relative">
+                <div class="bg-game-dark/60 p-4 rounded-xl border border-neon-blue/40 relative">
+                    <h3 class="font-fredoka text-neon-cyan tracking-wider mb-3 text-sm flex items-center gap-2"><i class="fa-solid fa-gamepad"></i> HOW TO ORDER</h3>
+                    <ul class="list-none text-gray-200 space-y-2 text-[12px]">
+                        <li class="flex items-start"><span class="bg-neon-blue text-white text-[10px] w-4 h-4 rounded flex justify-center items-center mr-2 shrink-0 mt-0.5 font-bold">1</span> ทักแชทแจ้งความต้องการ (หาไอดี / ฝากขาย / ทำป้ายเรท)</li>
+                        <li class="flex items-start"><span class="bg-neon-blue text-white text-[10px] w-4 h-4 rounded flex justify-center items-center mr-2 shrink-0 mt-0.5 font-bold">2</span> ส่งรายละเอียดตามบรีฟ ฟอร์ม หรือรูปภาพที่ต้องใช้ทำป้าย</li>
+                        <li class="flex items-start"><span class="bg-dark-blue text-white border border-neon-cyan text-[10px] w-4 h-4 rounded flex justify-center items-center mr-2 shrink-0 mt-0.5 font-bold">3</span> ชำระเงินตามเรทราคาที่ตกลง <span class="text-neon-cyan ml-1 font-bold">(จ่ายก่อนเริ่มงานทุกกรณี)</span></li>
+                        <li class="flex items-start"><span class="bg-neon-blue text-white text-[10px] w-4 h-4 rounded flex justify-center items-center mr-2 shrink-0 mt-0.5 font-bold">4</span> รอรับคิวและงานตามกำหนดการ เช็คคิวผ่านเว็บได้เลย</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-game-dark/60 p-4 rounded-xl border-2 border-dark-blue relative overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-20 h-20 bg-dark-blue rounded-full opacity-30"></div>
+                    <h3 class="font-fredoka text-neon-blue tracking-wider mb-3 text-sm flex items-center gap-2"><i class="fa-solid fa-circle-question"></i> FAQ</h3>
+                    <div class="text-white text-[12px] space-y-3 relative z-10">
+                        <div>
+                            <p class="font-bold text-neon-cyan mb-0.5">Q: งานด่วนได้ไหม?</p>
+                            <p class="text-gray-400">A: ทักมาสอบถามคิวงานก่อนได้ครับ ถ้าคิวไม่เยอะยินดีลัดคิวให้ฟรี!</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-neon-cyan mb-0.5">Q: มีประกันหลังการขายไหม?</p>
+                            <p class="text-gray-400">A: หากงานผิดพลาดจากทางร้าน (สะกดผิด/ข้อมูลตก) แก้ไขให้ฟรีทันที</p>
+                        </div>
+                        <div class="border-t border-dark-blue/50 pt-2 mt-2">
+                            <p class="text-red-400 font-bold mb-0.5">Q: เปลี่ยนใจยกเลิกงานได้ไหม?</p>
+                            <p class="text-red-300">A: หากเริ่มงานไปแล้ว ไม่สามารถคืนเงินได้ทุกกรณีครับ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-card rounded-3xl p-6 flex flex-col items-center justify-center text-center">
+            <div class="absolute bottom-4 right-4 flex items-end z-0 float-anim">
+                <div class="bg-neon-blue text-white font-fredoka text-[10px] px-3 py-1 mr-[-2px] mb-2 rounded-l-lg shadow-md transform rotate-12">CONTACT</div>
+                <div class="w-1 h-12 bg-dark-blue rounded-full"></div>
+            </div>
+
+            <h2 class="font-fredoka text-4xl md:text-5xl text-3d-title mb-2 z-10 uppercase transform rotate-[-2deg]">Contact<br>Us</h2>
+            <p class="text-neon-cyan font-fredoka tracking-widest text-xs mb-6 z-10 mt-2">TA RAY SHOP</p>
+            
+            <div class="flex space-x-4 z-10 mt-2">
+                <a href="https://www.facebook.com/share/1HXq3wncat/?mibextid=wwXIfr" target="_blank" class="flex items-center justify-center w-14 h-14 bg-game-dark border-2 border-neon-blue rounded-xl text-neon-blue hover:bg-neon-blue hover:text-white transition shadow-[4px_4px_0_#1E3A8A] transform hover:-translate-y-1">
+                    <i class="fa-brands fa-facebook-f text-2xl"></i>
+                </a>
+            </div>
+            <p class="text-[11px] text-gray-400 mt-4 z-10 font-medium">คลิกไอคอนเพื่อทักแชทสอบถามได้ตลอด 24 ชม.</p>
+        </div>
+
+        <div class="mt-6 border-y border-dark-blue/50 bg-game-dark/80 py-2 marquee-wrapper rounded-full shadow-lg">
+            <div class="marquee-content text-neon-cyan text-[12px] font-bold">
+                TA RAY SHOP ● รับหาไอดี ● รับฝากขาย ● ป้ายเรทราคา ● ป้ายคิวอาร์ ● บริการรวดเร็ว มั่นใจได้ 100% ●
+            </div>
+        </div>
+        <p class="text-center text-gray-600 text-[11px] mt-4 mb-8">ขอบคุณที่ไว้วางใจใช้บริการร้าน Ta Ray นะครับ 💙</p>
+
+    </div>
+
+    <script>
+        const container = document.getElementById('star-container');
+        
+        // Create Static Twinkling Stars
+        const starColors = ['#F8FAFC', '#60A5FA', '#22D3EE', '#1E3A8A'];
+        for (let i = 0; i < 40; i++) {
+            const star = document.createElement('div');
+            star.className = 'bg-star';
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.backgroundColor = starColors[Math.floor(Math.random() * starColors.length)];
+            star.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(star);
+        }
+
+        // Create Corrected Meteors (Falling from Top-Right to Bottom-Left)
+        setInterval(() => {
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            
+            // สุ่มจุดเกิดให้อยู่ด้านบนหรือด้านขวา เพื่อให้พุ่งเฉียงลงมาซ้ายได้สวยๆ
+            const startX = Math.random() * 150 + '%'; 
+            const startY = (Math.random() * 20 - 20) + '%'; // เริ่มจากเหนือขอบจอนิดนึง
+            
+            meteor.style.left = startX;
+            meteor.style.top = startY;
+            meteor.style.animationDuration = (Math.random() * 1 + 2) + 's'; // ความเร็ว 2-3 วิ
+            
+            container.appendChild(meteor);
+            
+            // ลบ element ทิ้งเมื่อแอนิเมชันจบ
+            setTimeout(() => meteor.remove(), 3000);
+        }, 1500); // ปล่อยดาวตกทุกๆ 1.5 วิ
+    </script>
+</body>
+</html>
